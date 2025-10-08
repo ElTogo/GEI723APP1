@@ -1,6 +1,8 @@
 from brian2 import *
 import matplotlib.pyplot as plt
 
+start_scope()
+
 G1 = NeuronGroup(10, 'dv/dt = -v / (10*ms) : 1',
                  threshold='v > 1', reset='v=0.', method='exact')
 G1.v = 1.2
