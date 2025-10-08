@@ -1,0 +1,2 @@
+matplotlib~=3.10.6
+brian2~=2.9.0
