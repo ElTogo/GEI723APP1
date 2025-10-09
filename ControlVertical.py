@@ -17,7 +17,7 @@ output_group.tau = 10*ms
 
 
 exc = Synapses(input_group, output_group, on_pre='I_post = 2')  # excitatrice
-inh = Synapses(input_group, output_group, on_pre='I_post = 0', )  # inhibitrice
+inh = Synapses(input_group, output_group, on_pre='I_post = 0')  # inhibitrice
 
 exc.connect(i=0, j=0)  # entrée 0 excite l’extenseur
 inh.connect(i=0, j=1)  # entrée 0 inhibe le fléchisseur
