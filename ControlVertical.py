@@ -8,8 +8,8 @@ tau : second
 I : 1
 """
 
-input_group = NeuronGroup(3, eqs, threshold='v>1', reset='v=0', method='euler', name='input')
-output_group = NeuronGroup(4, eqs, threshold='v>1', reset='v=0', method='euler', name='output')
+input_group = NeuronGroup(3, eqs, threshold='v>1', reset='v=0', method='euler', name='input') #Input : repos -> sol, excité -> dans les aires
+output_group = NeuronGroup(4, eqs, threshold='v>1', reset='v=0', method='euler', name='output') #0 : fléchiseur, #1 extenseur
 
 # Initialisation de tau pour éviter la division par zéro
 input_group.tau = 10*ms
@@ -30,7 +30,8 @@ input_group.I = [2, 0, 0]      # entrée excitée
 
 M_in1 = StateMonitor(input_group, 'v', record=True)
 M_out1 = StateMonitor(output_group, 'v', record=True)
-
+sp_11 = SpikeMonitor(input_group)
+sp_12 = SpikeMonitor(output_group)
 run(300*ms)
 
 v_in_excited = M_in1.v
@@ -71,6 +72,27 @@ xlabel("Temps (ms)")
 ylabel("Potentiel membranaire")
 legend(loc='best')
 grid(True)
+
+tight_layout()
+show()
+
+all_spikes = [
+    sp_11,
+    sp_12
+]
+
+n_neurons = len(all_spikes)
+plt.figure(figsize=(12, 8))
+
+for idx, sp in enumerate(all_spikes):
+    plt.subplot(1, 2, idx+1)
+    plt.plot(sp.t/ms, sp.i, '.k')
+    plt.title(f"Neurone {idx+1}")
+    plt.xlabel("Temps (ms)")
+    plt.ylabel("Spike")
+    plt.axvline(300)
+    plt.xlim(0,600)
+    plt.grid(True)
 
 tight_layout()
 show()

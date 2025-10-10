@@ -85,7 +85,7 @@ t1 = M_out_mr.t / ms
 # input_group.v = 0
 # output_group.v = 0
 # output_group.I = [0, 2, 1.5, 1.5] # neurones en constant excitation
-input_group.I = [0, 2, 0]
+input_group.I = [0, 1.9, 0]
 
 M_in_dr = StateMonitor(input_group, 'v', record=True)
 M_l1_dr = StateMonitor(l1, 'v', record=True)
@@ -105,7 +105,7 @@ v_l2_dr = M_l2_dr.v
 v_out_dr = M_out_dr.v
 t2 = M_out_dr.t / ms
 
-input_group.I = [0, 2, 2]
+input_group.I = [0, 1.9, 1.9]
 
 M_in_de = StateMonitor(input_group, 'v', record=True)
 M_l1_de = StateMonitor(l1, 'v', record=True)
@@ -290,7 +290,9 @@ show()
 # show()
 
 all_spikes = [
-    sp_11, sp_12, sp_13, sp_14,
+    sp_11,
+    # sp_12, sp_13,
+    sp_14,
     # sp_21, sp_22, sp_23, sp_24,
     # sp_31, sp_32, sp_33, sp_34
 ]
@@ -299,13 +301,15 @@ n_neurons = len(all_spikes)
 plt.figure(figsize=(12, 8))
 
 for idx, sp in enumerate(all_spikes):
-    plt.subplot(1, 4, idx+1)
-    plt.plot(sp.t/ms, sp.i, '.k')
-    plt.title(f"Neurone {idx+1}")
-    plt.xlabel("Temps (ms)")
-    plt.ylabel("Spike")
-    plt.xlim(0,900)
-    plt.grid(True)
+    subplot(1, 2, idx+1)
+    plot(sp.t/ms, sp.i, '.k')
+    title(f"Neurone {idx+1}")
+    xlabel("Temps (ms)")
+    ylabel("Spike")
+    axvline(300)
+    axvline(600)
+    xlim(0,900)
+    grid(True)
 
-plt.tight_layout()
-plt.show()
+tight_layout()
+show()
