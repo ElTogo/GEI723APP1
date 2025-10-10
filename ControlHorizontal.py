@@ -1,6 +1,22 @@
 import matplotlib.pyplot as plt
 from brian2 import *
 
+#####################################################
+# Ce code fait partie de la denière couche du réseau
+# Elle fait le pont entre le mouvement désié et les
+# actuateurs horizontaux du robots
+
+# Un groupe de 3 neurones d'entré représente les
+# 3 neurones où l'information est encodé (mais on
+# n'utilise que 2 des 3, l'autre est pour le
+# mouvement verticale)
+
+# Un groupe de 4 neurones de sorties représente les
+# 4 actuateurs d'une jambe (mais on n'en utilsie que
+# 2 car les deux autres sont les actuateurs vertical)
+#####################################################
+
+
 start_scope()
 
 eqs = """
@@ -22,6 +38,7 @@ l2 = NeuronGroup(2, eqs, threshold='v>1', reset='v=0', method='euler')
 l1.tau = 10*ms
 l2.tau = 8*ms
 
+# Connexions
 S_dir_to_inv = Synapses(input_group, l1, on_pre='v_post -= 0.6')
 S_dir_to_inv.connect(i=2, j=0)
 
@@ -126,7 +143,7 @@ v_out_de = M_out_de.v
 t3 = M_out_de.t / ms
 
 
-
+# Affichage
 figure(figsize=(12, 8))
 
 subplot(3,4,1)

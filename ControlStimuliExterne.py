@@ -1,6 +1,20 @@
 import matplotlib.pyplot as plt
 from brian2 import *
 
+#####################################################
+# Ce code est la première couche d'entré du réseau
+# Elle prend les stimuli externe et adapte les
+# commande d'entré selon la logique
+
+# Un groupe de 4 neurones d'entré représente les
+# 4 flancs du robots
+
+# Un groupe de 4 neurones de sorties représente les
+# 4 direction possible du robot (possible d'avoir plus
+# d'entré si on veux ajouter par exemple des sauts ou
+# des tours)
+#####################################################
+
 start_scope()
 
 eqs = """
@@ -18,6 +32,7 @@ output_group = NeuronGroup(4, eqs, threshold='v>1', reset='v=0', method='euler',
 input_group.tau = 10*ms
 output_group.tau = 10*ms
 
+#Connexions
 inib = Synapses(input_group, output_group, on_pre='v_post -= 1')
 exci = Synapses(input_group, output_group, on_pre='v_post += 1.2')
 
@@ -30,6 +45,7 @@ spikes_o = SpikeMonitor(output_group)
 state_i = StateMonitor(input_group, 'v', record=True)
 state_o = StateMonitor(output_group, 'v', record=True)
 
+# Simulation
 input_group.I = [2,0,0,0]
 output_group.I = [1.1,0,0,0]
 run(100*ms)
@@ -49,6 +65,7 @@ v_o = state_o.v
 ti = state_i.t/ms
 to = state_o.t/ms
 
+# Affichage des résultats
 subplot(2,1,1)
 title("Input")
 plot(ti, v_i[0], label='Forward', color='tab:olive')

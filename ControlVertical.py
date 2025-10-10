@@ -1,5 +1,20 @@
 from brian2 import *
 
+#####################################################
+# Ce code fait partie de la denière couche du réseau
+# Elle fait le pont entre le mouvement désié et les
+# actuateurs horizontaux du robots
+
+# Un groupe de 3 neurones d'entré représente les
+# 3 neurones où l'information est encodé (mais on
+# n'utilise que 2 des 3, l'autre est pour le
+# mouvement verticale)
+
+# Un groupe de 4 neurones de sorties représente les
+# 4 actuateurs d'une jambe (mais on n'en utilsie que
+# 2 car les deux autres sont les actuateurs vertical)
+#####################################################
+
 start_scope()
 
 eqs = """
@@ -11,11 +26,10 @@ I : 1
 input_group = NeuronGroup(3, eqs, threshold='v>1', reset='v=0', method='euler', name='input') #Input : repos -> sol, excité -> dans les aires
 output_group = NeuronGroup(4, eqs, threshold='v>1', reset='v=0', method='euler', name='output') #0 : fléchiseur, #1 extenseur
 
-# Initialisation de tau pour éviter la division par zéro
 input_group.tau = 10*ms
 output_group.tau = 10*ms
 
-
+# Connexion
 exc = Synapses(input_group, output_group, on_pre='I_post = 2')  # excitatrice
 inh = Synapses(input_group, output_group, on_pre='I_post = 0')  # inhibitrice
 
@@ -53,7 +67,7 @@ v_in_idle = M_in2.v
 v_out_idle = M_out2.v
 t2 = M_out2.t / ms
 
-
+# Affichage
 figure(figsize=(12, 8))
 
 subplot(2,1,1)
