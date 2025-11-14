@@ -1,3 +1,7 @@
+# Raphael L'Heureux, Émile Poulin, Félix Doyon
+# 14 novembre 2025
+# Ce code est adapté de l'exemple de STDP de Brian2 se trouvant sur le lien suivant: https://brian2.readthedocs.io/en/latest/examples/synapses.STDP.html
+
 from brian2 import *
 
 # paramètres globaux et setup des neurones commun
@@ -17,7 +21,7 @@ poisson_input = PoissonGroup(N, rates=F)
 neurons = NeuronGroup(1, eqs_neurons, threshold='v>vt', reset='v = vr',
                       method='euler')
 
-# aI, classique comme exemple de base fournit de brian2 (https://brian2.readthedocs.io/en/latest/examples/synapses.STDP.html)
+# aI, STDP Hebienne classique
 taupre_aI = 20*ms
 taupost_aI = 20*ms
 dApre_aI = .01 * gmax
@@ -32,7 +36,7 @@ on_pre_aI = '''ge += w
 on_post_aI = '''Apost += dApost_aI
                 w = clip(w + Apre, 0, gmax)'''
 
-# aII, adaptation coneptuelle
+# aII, adaptation conceptuelle
 # slow et fast permet de faire la courbe descendante rapide et remontante lente dans le post
 tau_fast = 5*ms
 tau_slow = 50*ms
@@ -48,7 +52,7 @@ on_pre_aII = '''ge += w
 on_post_aII = '''A_fast += dA_fast
                 w = clip(w - A_slow, 0, gmax)'''
 
-# bI, potentiation symétrique-
+# bI, potentiation symétrique
 tau_bI = 10*ms
 dA_bI = .01 * gmax
 
@@ -60,7 +64,7 @@ on_pre_bI = '''ge += w
 on_post_bI = '''A += dA_bI
                 w = clip(w + A, 0, gmax)'''
 
-# bII, Anti-Hebbian
+# bII, Anti-Hebbienne
 tau_bII = 20*ms
 dApre_LTD = -.01 * gmax
 dApost_LTP = .01 * gmax
